@@ -2,7 +2,8 @@ import MapCell from './MapCell'
 import biomes from './biomes'
 
 class Map {
-  constructor() {
+  constructor(game) {
+    this.game = game
     this.mapSize = 20
     this.cells = this.generateCells()
   }
@@ -22,7 +23,7 @@ class Map {
 
         if (x > lake[0] - lakeSize && x < lake[0] + lakeSize && y > lake[1] - lakeSize && y < lake[1] + lakeSize) randomBiome = biomes.Lake
 
-        generatedMap.push(new MapCell(x, y, randomBiome))
+        generatedMap.push(new MapCell(this, x, y, randomBiome))
       }
     }
     return generatedMap

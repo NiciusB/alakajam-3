@@ -1,6 +1,5 @@
 <template>
   <div :class="classNames" :style="style">
-
   </div>
 </template>
 

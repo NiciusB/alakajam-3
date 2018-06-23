@@ -42,7 +42,9 @@ export default function(game, player) {
   function move(availableActions) {
     var availableMove = availableActions.find(action => action.__name === 'Move')
     if (availableMove) {
-      var noisiestCell = player.surroundingCells().sort((a, b) => a.noise < b.noise ? 1 : -1)[0]
+      var surroundingCells = player.cell.getAdjacentCells()
+      var shuffledCells = surroundingCells.map((a) => [Math.random(), a]).sort((a, b) => a[0] - b[0]).map((a) => a[1])
+      var noisiestCell = shuffledCells.sort((a, b) => a.noise < b.noise ? 1 : -1)[0]
       availableMove.use(player, {
         x: noisiestCell.x,
         y: noisiestCell.y

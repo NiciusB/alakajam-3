@@ -48,7 +48,7 @@ actions.HideInBush = {
     if (!this.isAvailable(player)) return false
     player.actionPoints -= this.actionPoints
 
-    player.cell.changeNoise(-20)
+    player.cell.changeNoise(-5)
     return true
   }
 }

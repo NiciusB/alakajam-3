@@ -4,7 +4,7 @@ import BasicAI from './BasicAI'
 
 class Game {
   constructor(map) {
-    if (!map) map = new Map()
+    if (!map) map = new Map(this)
     this.map = map
     this.turn = 0
     this.players = []
@@ -27,7 +27,13 @@ class Game {
       })
 
       this.map.cells.forEach(cell => {
-        cell.changeNoise(-5)
+        if (cell.noise < 0.01) return false
+        cell.getAdjacentCells().forEach(neighbourCell => {
+          if (typeof neighbourCell.noise !== 'undefined') neighbourCell.changeNoise(cell.noise * 0.025)
+        })
+      })
+      this.map.cells.forEach(cell => {
+        cell.changeNoise(-cell.noise * 0.3)
       })
     }
 

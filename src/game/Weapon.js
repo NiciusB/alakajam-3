@@ -22,9 +22,9 @@ class Weapon {
   }
 
   calculateNoise(type, tier) {
-    if (type === 'Melee') return 15 - 2 * tier
-    if (type === 'Shotgun') return 40 - 4 * tier
-    if (type === 'Sniper') return 20 + 5 * tier
+    if (type === 'Melee') return 20 - 2 * tier
+    if (type === 'Shotgun') return 60 - 4 * tier
+    if (type === 'Sniper') return 60 + 5 * tier
   }
 
   calculateRange(type, tier) {

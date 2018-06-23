@@ -1,7 +1,8 @@
 import loot from './loot'
 
 class MapCell {
-  constructor(x, y, biome) {
+  constructor(map, x, y, biome) {
+    this.map = map
     this.x = x
     this.y = y
     this.biome = biome
@@ -35,6 +36,11 @@ class MapCell {
     if (player.cell) player.cell.removePlayer(player)
     this.players.push(player)
     player.cell = this
+    this.changeNoise(15)
+  }
+
+  getAdjacentCells() {
+    return [[-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1, 1]].map(adjacent => this.map.cell(this.x + adjacent[0], this.y + adjacent[1]))
   }
 }
 
