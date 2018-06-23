@@ -1,6 +1,12 @@
 <template>
   <div v-if="!cell.biome" class="cell" :style="{backgroundColor: '#004146'}"></div>
   <div v-else @click="cellClicked" class="cell" :style="{backgroundColor}">
+    <div class="badguys">
+      <div v-for="player in enemies" :key="player.id" >
+        <span>{{player.name}}</span>
+        <img src="@/assets/badguy.png" />
+      </div>
+    </div>
     <div class="player" v-if="hasControlledPlayer">
       <img src="@/assets/guy.png" />
     </div>
@@ -8,6 +14,8 @@
 </template>
 
 <script>
+import actions from '@/game/actions'
+
 export default {
   props: {
     game: Object,
@@ -17,6 +25,9 @@ export default {
     backgroundColor() {
       return this.cell.biome.backgroundColor
     },
+    enemies() {
+      return this.cell.players.filter(player => player !== this.game.controlledPlayer)
+    },
     hasControlledPlayer() {
       return this.cell.players.some(player => player === this.game.controlledPlayer)
     }
@@ -24,7 +35,9 @@ export default {
   methods: {
     cellClicked() {
       if (!this.cell.biome) return false // Behind border: fake cell
-      this.cell.movePlayer(this.game.controlledPlayer)
+      if (!actions.Move.use(this.game.controlledPlayer, {x: this.cell.x, y: this.cell.y})) {
+        alert('Not enough action points')
+      }
     }
   }
 }
@@ -38,6 +51,22 @@ export default {
     width: 33.333333333333333333%;
     height: 33.333333333333333333%;
     cursor: pointer;
+    .badguys {
+      position: absolute;
+      top: 10%;
+      width: 100%;
+      text-align: center;
+      >div {
+        margin: 0 5px;
+        display: inline-block;
+        img {
+          max-height: 30px;
+          display: block;
+          margin: auto;
+          margin-top: 5px;
+        }
+      }
+    }
     .player {
       img {
         position: absolute;
@@ -46,7 +75,7 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        max-height: 200px;
+        max-height: 50px;
       }
     }
   }

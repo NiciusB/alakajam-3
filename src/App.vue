@@ -67,6 +67,7 @@ export default {
       position: relative;
       width: 560px;
       height: 360px;
+      float: left;
     }
     .bottom {
       width: 560px;

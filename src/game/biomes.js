@@ -1,20 +1,37 @@
 class Biome {
-  constructor(name, backgroundColor) {
+  constructor(name, backgroundColor, options) {
     this.name = name
     this.backgroundColor = backgroundColor
+    this.options = options
   }
 }
 
 const biomes = {}
 
-biomes.Plains = new Biome('Plains', '#B9C739')
-biomes.Desert = new Biome('Desert', '#9B7766')
-biomes.Beach = new Biome('Beach', '#D7D700')
-biomes.Jungle = new Biome('Jungle', '#396721')
-biomes.Rural = new Biome('Rural', '#C5A287')
-biomes.City = new Biome('City', '#AFA7A4')
-biomes.Ocean = new Biome('Ocean', '#236D7F')
-biomes.Lake = new Biome('Lake', '#236D7F')
+biomes.Plains = new Biome('Plains', '#B9C739', {
+  loot: [0, 80]
+})
+biomes.Desert = new Biome('Desert', '#9B7766', {
+  loot: [0, 50]
+})
+biomes.Beach = new Biome('Beach', '#D7D700', {
+  loot: [10, 60]
+})
+biomes.Jungle = new Biome('Jungle', '#396721', {
+  loot: [20, 70]
+})
+biomes.Rural = new Biome('Rural', '#C5A287', {
+  loot: [30, 90]
+})
+biomes.City = new Biome('City', '#AFA7A4', {
+  loot: [60, 100]
+})
+biomes.Ocean = new Biome('Ocean', '#236D7F', {
+
+})
+biomes.Lake = new Biome('Lake', '#236D7F', {
+
+})
 
 biomes.allBiomes = Object.keys(biomes).filter(val => (['Lake', 'Ocean', 'City', 'Beach'].indexOf(val) === -1) && biomes[val] instanceof Biome).map(val => biomes[val])
 
