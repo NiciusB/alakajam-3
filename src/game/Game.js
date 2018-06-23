@@ -4,10 +4,10 @@ import BasicAI from './BasicAI'
 
 class Game {
   constructor(map) {
+    this.loading = true
     if (!map) map = new Map(this)
     this.map = map
     this.turn = 0
-    this.loadingTurn = false
     this.players = []
     this.controlledPlayer = new Player(this, false, this.map.randomCell())
     this.players.push(this.controlledPlayer)
@@ -15,6 +15,7 @@ class Game {
       this.players.push(new Player(this, BasicAI, this.map.randomCell()))
     }
     this.nextTurn()
+    this.loading = false
   }
 
   nextTurn() {
@@ -42,7 +43,7 @@ class Game {
     setTimeout(() => {
       this.turn++
       this.players.forEach(player => {
-        player.actionPoints = 5
+        player.actionPoints = 6
       })
       this.loadingTurn = false
     }, 700)

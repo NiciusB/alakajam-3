@@ -34,6 +34,52 @@ actions.DropactiveItem = {
   }
 }
 
+actions.UseBandages = {
+  __name: 'UseBandages',
+  name: 'Use bandages',
+  actionPoints: function (player) {
+    return player.inventory.activeItem.actionPoints
+  },
+  isAvailable: function (player) {
+    if ((typeof this.actionPoints === 'function' ? this.actionPoints(player) : this.actionPoints) > player.actionPoints) return false
+    if (player.health === 100) return false
+    if (!player.inventory.activeItem) return false
+    if (player.inventory.activeItem.type !== 'Bandages') return false
+    return true
+  },
+  use: function (player) {
+    if (!this.isAvailable(player)) return false
+    player.actionPoints -= typeof this.actionPoints === 'function' ? this.actionPoints(player) : this.actionPoints
+
+    player.inventory.activeItem.use(player)
+    player.inventory.removeItem(player.inventory.activeItem)
+    return true
+  }
+}
+
+actions.UseShield = {
+  __name: 'UseShield',
+  name: 'Use shield',
+  actionPoints: function (player) {
+    return player.inventory.activeItem.actionPoints
+  },
+  isAvailable: function (player) {
+    if ((typeof this.actionPoints === 'function' ? this.actionPoints(player) : this.actionPoints) > player.actionPoints) return false
+    if (player.shield === 100) return false
+    if (!player.inventory.activeItem) return false
+    if (player.inventory.activeItem.type !== 'Shield') return false
+    return true
+  },
+  use: function (player) {
+    if (!this.isAvailable(player)) return false
+    player.actionPoints -= typeof this.actionPoints === 'function' ? this.actionPoints(player) : this.actionPoints
+
+    player.inventory.activeItem.use(player)
+    player.inventory.removeItem(player.inventory.activeItem)
+    return true
+  }
+}
+
 actions.HideInBush = {
   __name: 'HideInBush',
   name: 'Hide in bush',
@@ -48,7 +94,7 @@ actions.HideInBush = {
     if (!this.isAvailable(player)) return false
     player.actionPoints -= this.actionPoints
 
-    player.cell.changeNoise(-5)
+    player.giveHeal(1)
     return true
   }
 }

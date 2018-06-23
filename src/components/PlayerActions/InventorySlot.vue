@@ -3,7 +3,7 @@
     <div v-if="item">
       <p>{{item.type}}</p>
       <p>Tier {{item.tier}}</p>
-      <p v-if="item.ammunition !== Infinity">{{item.ammunition}} ammo</p>
+      <p v-if="item.ammunition && item.ammunition !== Infinity">{{item.ammunition}} ammo</p>
     </div>
   </div>
 </template>

@@ -3,7 +3,7 @@
   <div v-else @click="cellClicked" class="cell" :style="{backgroundColor}">
     <div class="badguys">
       <div v-for="player in enemies" :key="player.id" >
-        <span>{{player.health}}</span>
+        <span>{{player.health}} ({{player.shield}})</span>
         <br/>
         <span>{{player.name}}</span>
         <img src="@/assets/badguy.png" />

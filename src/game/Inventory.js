@@ -14,10 +14,20 @@ class Inventory {
   }
 
   drop(item) {
+    this.removeItem(item)
+    this.player.cell.loot.push(item)
+  }
+
+  wasteAmmunition(item) {
+    if (--item.ammunition === 0) {
+      this.removeItem(item)
+    }
+  }
+
+  removeItem(item) {
     var itemIndex = this.slots.indexOf(item)
     if (itemIndex === -1) return false
     this.slots.splice(itemIndex, 1)
-    this.player.cell.loot.push(item)
     if (item === this.activeItem) {
       this.activeItem = this.slots.length ? (this.slots[itemIndex] || this.slots[this.slots.length - 1]) : false
     }

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="left">
+    <div v-if="!game.loading" class="left">
       <div class="top">
         <Minimap :game="game" />
         <Player-info :game="game" />
@@ -9,7 +9,7 @@
         <Player-actions :game="game" />
       </div>
     </div>
-    <div class="right">
+    <div v-if="!game.loading" class="right">
       <Map :game="game" />
     </div>
     <transition-group name="fade" tag="div" class="damage-feed">

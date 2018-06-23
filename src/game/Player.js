@@ -34,7 +34,7 @@ class Player {
               availableActions.push({
                 __name: actions[actionName].__name,
                 name: `${actions[actionName].name} ${player.name}`,
-                actionPoints: actions[actionName].actionPoints,
+                actionPoints: typeof actions[actionName].actionPoints === 'function' ? actions[actionName].actionPoints(this) : actions[actionName].actionPoints,
                 isAvailable: actions[actionName].isAvailable,
                 use: () => { actions[actionName].use(this, {player}) } // Custom run
               })
@@ -48,7 +48,7 @@ class Player {
         availableActions.push({
           __name: actions[actionName].__name,
           name: actions[actionName].name,
-          actionPoints: actions[actionName].actionPoints,
+          actionPoints: typeof actions[actionName].actionPoints === 'function' ? actions[actionName].actionPoints(this) : actions[actionName].actionPoints,
           isAvailable: actions[actionName].isAvailable,
           use: actions[actionName].use
         })
@@ -66,9 +66,21 @@ class Player {
   }
 
   attack(player) {
+    if (!this.inventory.activeItem || !this.inventory.activeItem.damage) return false
     if (!this.inRangeFor(player)) return false
     player.damage(this.inventory.activeItem.damage, this.name, this)
     this.cell.changeNoise(this.inventory.activeItem.noise)
+    this.inventory.wasteAmmunition(this.inventory.activeItem)
+  }
+
+  giveHeal(amount) {
+    this.health += amount
+    if (this.health > 100) this.health = 100
+  }
+
+  giveShield(amount) {
+    this.shield += amount
+    if (this.shield > 100) this.shield = 100
   }
 
   damage(damage, reason, killAwardedTo = false) {
@@ -78,12 +90,13 @@ class Player {
     if (this.shield < 0) {
       this.health += this.shield
       this.shield = 0
-      if (this.health <= 0) this.die()
+      if (this.health <= 0) this.die(killAwardedTo)
     }
   }
 
-  die() {
+  die(killAwardedTo = false) {
     this.alive = false
+    if (killAwardedTo) killAwardedTo.killCount++
     this.cell.changeNoise(10)
     if (this === this.game.controlledPlayer) {
       alert('Game Over')
@@ -91,8 +104,9 @@ class Player {
     }
 
     if (this.inventory.slots.length) {
-      var todrop = this.inventory.bestWeapon()
-      this.cell.loot.push(todrop)
+      this.inventory.slots.filter(slot => slot.damage === undefined || slot.tier > 1).forEach(todrop => {
+        this.cell.loot.push(todrop)
+      })
     }
     this.cell.removePlayer(this)
     this.game.players.splice(this.game.players.findIndex(player => player === this), 1)
