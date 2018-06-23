@@ -16,20 +16,20 @@ actions.FinishTurn = {
   }
 }
 
-actions.DropActiveWeapon = {
-  __name: 'DropActiveWeapon',
-  name: 'Drop active weapon',
+actions.DropactiveItem = {
+  __name: 'DropactiveItem',
+  name: 'Drop active item',
   actionPoints: 0,
   isAvailable: function (player) {
     if (this.actionPoints > player.actionPoints) return false
-    if (!player.inventory.activeWeapon) return false
+    if (!player.inventory.activeItem) return false
     return true
   },
   use: function (player) {
     if (!this.isAvailable(player)) return false
     player.actionPoints -= this.actionPoints
 
-    player.inventory.drop(player.inventory.activeWeapon)
+    player.inventory.drop(player.inventory.activeItem)
     return true
   }
 }
@@ -81,7 +81,7 @@ actions.Attack = {
   isAvailable: function (player, options = {}) {
     if (typeof options.player === 'undefined') return false
     if (this.actionPoints > player.actionPoints) return false
-    if (!player.inventory.activeWeapon) return false
+    if (!player.inventory.activeItem) return false
     if (!player.inRangeFor(options.player)) return false
     return true
   },

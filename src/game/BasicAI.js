@@ -1,4 +1,6 @@
 export default function(game, player) {
+  if (!player.alive) return false
+
   if (!player._ai) {
     player._ai = {
       aggressiveness: Math.floor(1 + Math.random() * 2) // 1, 2, 3
@@ -65,8 +67,8 @@ export default function(game, player) {
 
   function switchToBestWeapon() {
     var bestWeapon = player.inventory.bestWeapon()
-    if (player.inventory.activeWeapon !== bestWeapon) {
-      player.inventory.activeWeapon = bestWeapon
+    if (player.inventory.activeItem !== bestWeapon) {
+      player.inventory.activeItem = bestWeapon
     }
   }
 }

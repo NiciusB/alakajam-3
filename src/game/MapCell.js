@@ -21,7 +21,7 @@ class MapCell {
   generateLoot() {
     if (!this.biome.options || !this.biome.options.loot) return false
 
-    var itemsNum = Math.floor(1 + Math.random() * 2)
+    var itemsNum = Math.floor(0 + Math.random() * 2)
     for (let k = 0; k < itemsNum; k++) {
       var luck = Math.floor(this.biome.options.loot[0] + Math.random() * (this.biome.options.loot[1] - this.biome.options.loot[0]))
       this.loot.push(loot(luck))

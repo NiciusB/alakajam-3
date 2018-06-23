@@ -19,7 +19,7 @@ export default {
   methods: {
     slotClicked() {
       if (!this.item) return false
-      this.game.controlledPlayer.inventory.activeWeapon = this.item
+      this.game.controlledPlayer.inventory.activeItem = this.item
     }
   },
   computed: {
@@ -27,7 +27,7 @@ export default {
       const classNames = {}
       classNames.slot = true
       if (this.item === false) return classNames
-      classNames.active = this.item === this.game.controlledPlayer.inventory.activeWeapon
+      classNames.active = this.item === this.game.controlledPlayer.inventory.activeItem
       classNames[`tier${this.item.tier}`] = true
       return classNames
     }

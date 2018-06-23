@@ -9,6 +9,11 @@
         <img src="@/assets/badguy.png" />
       </div>
     </div>
+    <div class="loot">
+      <div v-for="(loot, index) in cell.loot" :key="index" >
+        <img src="@/assets/loot.png" />
+      </div>
+    </div>
     <div class="player" v-if="hasControlledPlayer">
       <img src="@/assets/guy.png" />
     </div>
@@ -79,6 +84,22 @@ export default {
         left: 0;
         right: 0;
         max-height: 50px;
+      }
+    }
+    .loot {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      text-align: center;
+      >div {
+        margin: 0 5px;
+        display: inline-block;
+        img {
+          max-height: 20px;
+          display: block;
+          margin: auto;
+          margin-top: 5px;
+        }
       }
     }
   }

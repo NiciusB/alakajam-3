@@ -7,6 +7,7 @@ class Game {
     if (!map) map = new Map(this)
     this.map = map
     this.turn = 0
+    this.loadingTurn = false
     this.players = []
     this.controlledPlayer = new Player(this, false, this.map.randomCell())
     this.players.push(this.controlledPlayer)
@@ -17,6 +18,7 @@ class Game {
   }
 
   nextTurn() {
+    this.loadingTurn = true
     if (this.turn !== 0) {
       this.players.forEach((player, index) => {
         if (player.ai) {
@@ -42,6 +44,7 @@ class Game {
       this.players.forEach(player => {
         player.actionPoints = 5
       })
+      this.loadingTurn = false
     }, 700)
   }
 }

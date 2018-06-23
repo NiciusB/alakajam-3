@@ -7,11 +7,13 @@ class Player {
     this.game = game
     this.id = this.game.players.length
     this.ai = ai
+    this.alive = true
     this.name = this.ai === false ? '' : this.randomGamertag()
     this.killCount = 0
     this.health = 100
     this.shield = 0
     this.actionPoints = 0
+    this.damageFeed = []
     this.inventory = new Inventory(this)
     cell.movePlayer(this)
   }
@@ -57,19 +59,20 @@ class Player {
   }
 
   inRangeFor(player) {
-    if (!this.inventory.activeWeapon) return false
+    if (!this.inventory.activeItem) return false
 
     var distance = Math.abs(player.cell.x - this.cell.x) + Math.abs(player.cell.y - this.cell.y)
-    return distance <= this.inventory.activeWeapon.range
+    return distance <= this.inventory.activeItem.range
   }
 
   attack(player) {
     if (!this.inRangeFor(player)) return false
-    player.damage(this.inventory.activeWeapon.damage)
-    this.cell.changeNoise(this.inventory.activeWeapon.noise)
+    player.damage(this.inventory.activeItem.damage, this.name, this)
+    this.cell.changeNoise(this.inventory.activeItem.noise)
   }
 
-  damage(damage) {
+  damage(damage, reason, killAwardedTo = false) {
+    this.damageFeed.push({damage, reason})
     this.cell.changeNoise(5)
     this.shield -= damage
     if (this.shield < 0) {
@@ -80,6 +83,7 @@ class Player {
   }
 
   die() {
+    this.alive = false
     this.cell.changeNoise(10)
     if (this === this.game.controlledPlayer) {
       alert('Game Over')
