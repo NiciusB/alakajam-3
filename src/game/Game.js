@@ -18,15 +18,25 @@ class Game {
 
   nextTurn() {
     if (this.turn !== 0) {
-      this.players.forEach(player => {
-        if (player.ai) player.ai(this, player)
+      this.players.forEach((player, index) => {
+        if (player.ai) {
+          setTimeout(() => {
+            player.ai(this, player)
+          }, index * 5)
+        }
+      })
+
+      this.map.cells.forEach(cell => {
+        cell.changeNoise(-5)
       })
     }
 
-    this.turn++
-    this.players.forEach(player => {
-      player.actionPoints = 5
-    })
+    setTimeout(() => {
+      this.turn++
+      this.players.forEach(player => {
+        player.actionPoints = 5
+      })
+    }, 700)
   }
 }
 

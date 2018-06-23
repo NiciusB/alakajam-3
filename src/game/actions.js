@@ -2,6 +2,7 @@
 const actions = {}
 
 actions.FinishTurn = {
+  __name: 'FinishTurn',
   name: 'Finish Turn',
   actionPoints: 0,
   isAvailable: function (player) {
@@ -16,6 +17,7 @@ actions.FinishTurn = {
 }
 
 actions.DropActiveWeapon = {
+  __name: 'DropActiveWeapon',
   name: 'Drop active weapon',
   actionPoints: 0,
   isAvailable: function (player) {
@@ -33,6 +35,7 @@ actions.DropActiveWeapon = {
 }
 
 actions.HideInBush = {
+  __name: 'HideInBush',
   name: 'Hide in bush',
   actionPoints: 1,
   isAvailable: function (player) {
@@ -44,12 +47,13 @@ actions.HideInBush = {
     if (!this.isAvailable(player)) return false
     player.actionPoints -= this.actionPoints
 
-    player.changeNoise(-15)
+    player.cell.changeNoise(-20)
     return true
   }
 }
 
 actions.Loot = {
+  __name: 'Loot',
   name: 'Loot',
   actionPoints: 1,
   isAvailable: function (player) {
@@ -70,8 +74,9 @@ actions.Loot = {
 }
 
 actions.Attack = {
+  __name: 'Attack',
   name: 'Attack',
-  actionPoints: 1,
+  actionPoints: 3,
   isAvailable: function (player, options = {}) {
     if (typeof options.player === 'undefined') return false
     if (this.actionPoints > player.actionPoints) return false
@@ -88,11 +93,15 @@ actions.Attack = {
 }
 
 actions.Move = {
+  __name: 'Move',
   name: 'Move',
   actionPoints: 3,
   isAvailable: function (player, options = {}) {
     if (this.actionPoints > player.actionPoints) return false
-    if (!(typeof options.x === 'undefined' || typeof options.y === 'undefined') && !player.game.map.cell(options.x, options.y).biome) return false
+    if (!(typeof options.x === 'undefined' || typeof options.y === 'undefined')) {
+      if (!player.game.map.cell(options.x, options.y).biome) return false
+      if (options.x === player.cell.x && options.y === player.cell.y) return false
+    }
     return true
   },
   use: function (player, options = {}) {

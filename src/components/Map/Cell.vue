@@ -3,7 +3,9 @@
   <div v-else @click="cellClicked" class="cell" :style="{backgroundColor}">
     <div class="badguys">
       <div v-for="player in enemies" :key="player.id" >
-        <span>{{player.name}} ({{player.health}})</span>
+        <span>{{player.health}}</span>
+        <br/>
+        <span>{{player.name}}</span>
         <img src="@/assets/badguy.png" />
       </div>
     </div>
@@ -35,6 +37,7 @@ export default {
   methods: {
     cellClicked() {
       if (!this.cell.biome) return false // Behind border: fake cell
+      if (this.cell === this.game.controlledPlayer.cell) return false
       if (!actions.Move.use(this.game.controlledPlayer, {x: this.cell.x, y: this.cell.y})) {
         alert('Not enough action points')
       }

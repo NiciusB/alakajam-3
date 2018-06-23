@@ -24,6 +24,12 @@ class Inventory {
   equip(item) {
     this.slots.push(item)
   }
+
+  bestWeapon() {
+    return this.slots.slice().sort((a, b) => {
+      return a.damage < b.damage ? 1 : -1
+    })[0]
+  }
 }
 
 export default Inventory

@@ -9,7 +9,6 @@ class Player {
     this.ai = ai
     this.name = this.ai === false ? '' : this.randomGamertag()
     this.killCount = 0
-    this.noise = 50
     this.health = 100
     this.shield = 0
     this.actionPoints = 0
@@ -20,12 +19,6 @@ class Player {
   randomGamertag() {
     var randomGamertag = gamertags[Math.floor(Math.random() * gamertags.length)]
     return this.game.players.some(player => player.name === randomGamertag) ? this.randomGamertag() : randomGamertag
-  }
-
-  changeNoise(change) {
-    this.noise += change
-    if (this.noise < 0) this.noise = 0
-    if (this.noise > 100) this.noise = 100
   }
 
   surroundingCells() {
@@ -49,6 +42,7 @@ class Player {
           cell.players.forEach(player => {
             if (player !== this && actions[actionName].isAvailable(this, {player})) {
               availableActions.push({
+                __name: actions[actionName].__name,
                 name: `${actions[actionName].name} ${player.name}`,
                 actionPoints: actions[actionName].actionPoints,
                 isAvailable: actions[actionName].isAvailable,
@@ -62,6 +56,7 @@ class Player {
 
       if (actions[actionName].isAvailable(this)) {
         availableActions.push({
+          __name: actions[actionName].__name,
           name: actions[actionName].name,
           actionPoints: actions[actionName].actionPoints,
           isAvailable: actions[actionName].isAvailable,
@@ -89,9 +84,11 @@ class Player {
   attack(player) {
     if (!this.inRangeFor(player)) return false
     player.damage(this.inventory.activeWeapon.damage)
+    this.cell.changeNoise(this.inventory.activeWeapon.noise)
   }
 
   damage(damage) {
+    this.cell.changeNoise(5)
     this.shield -= damage
     if (this.shield < 0) {
       this.health += this.shield
@@ -101,10 +98,14 @@ class Player {
   }
 
   die() {
+    this.cell.changeNoise(10)
+    if (this === this.game.controlledPlayer) {
+      alert('Game Over')
+      document.location.reload()
+    }
+
     if (this.inventory.slots.length) {
-      var todrop = this.inventory.slots.sort((a, b) => {
-        return a.tier > b.tier ? 1 : -1
-      })[0]
+      var todrop = this.inventory.bestWeapon()
       this.cell.loot.push(todrop)
     }
     this.cell.removePlayer(this)

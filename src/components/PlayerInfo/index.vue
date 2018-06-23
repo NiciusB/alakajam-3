@@ -3,7 +3,8 @@
     <p>Turn: {{game.turn}}</p>
     <p>X: {{game.controlledPlayer.cell.x}}</p>
     <p>Y: {{game.controlledPlayer.cell.y}}</p>
-    <p>Noise: {{game.controlledPlayer.noise}}</p>
+    <p>Health: {{game.controlledPlayer.health}}</p>
+    <p>Noise: {{game.controlledPlayer.cell.noise}}</p>
     <p>Kill count: {{game.controlledPlayer.killCount}}</p>
     <p>Players remaining: {{game.players.length}}</p>
   </div>

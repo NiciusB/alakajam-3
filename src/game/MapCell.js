@@ -5,9 +5,16 @@ class MapCell {
     this.x = x
     this.y = y
     this.biome = biome
+    this.noise = 0
     this.players = []
     this.loot = []
     this.generateLoot()
+  }
+
+  changeNoise(change) {
+    this.noise += change
+    if (this.noise < 0) this.noise = 0
+    if (this.noise > 100) this.noise = 100
   }
 
   generateLoot() {
