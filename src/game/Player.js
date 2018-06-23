@@ -72,13 +72,7 @@ class Player {
     if (!this.inventory.activeWeapon) return false
 
     var distance = Math.abs(player.cell.x - this.cell.x) + Math.abs(player.cell.y - this.cell.y)
-    if (['Melee', 'Shotgun'].indexOf(this.inventory.activeWeapon.type) !== -1) {
-      return distance <= 0
-    }
-    if (['Sniper'].indexOf(this.inventory.activeWeapon.type) !== -1) {
-      return distance <= 1
-    }
-    return false
+    return distance <= this.inventory.activeWeapon.range
   }
 
   attack(player) {

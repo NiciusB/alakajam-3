@@ -6,6 +6,7 @@ class Weapon {
     this.ammunition = this.defaultAmmunition(type, tier)
     this.damage = this.calculateDamage(type, tier)
     this.noise = this.calculateNoise(type, tier)
+    this.range = this.calculateRange(type, tier)
   }
 
   defaultAmmunition(type, tier) {
@@ -24,6 +25,12 @@ class Weapon {
     if (type === 'Melee') return 15 - 2 * tier
     if (type === 'Shotgun') return 40 - 4 * tier
     if (type === 'Sniper') return 20 + 5 * tier
+  }
+
+  calculateRange(type, tier) {
+    if (type === 'Melee') return 0
+    if (type === 'Shotgun') return 1
+    if (type === 'Sniper') return 2
   }
 }
 

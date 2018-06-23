@@ -41,6 +41,7 @@ actions.HideInBush = {
   isAvailable: function (player) {
     if (this.actionPoints > player.actionPoints) return false
     if (['Ocean', 'Lake'].indexOf(player.cell.biome.name) !== -1) return false
+    if (player.cell.noise === 0) return false
     return true
   },
   use: function (player) {
