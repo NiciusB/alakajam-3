@@ -44,6 +44,10 @@ export default {
 @import "./css/normalize.min.css";
 @import "./css/main.css";
 
+*, :after, :before {
+    box-sizing: border-box;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

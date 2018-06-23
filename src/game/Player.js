@@ -43,9 +43,72 @@ class Player {
   availableActions() {
     const availableActions = []
     Object.keys(actions).forEach(actionName => {
-      if (actions[actionName].isAvailable(this)) availableActions.push(actions[actionName])
+      if (actionName === 'Attack') {
+        this.surroundingCells().forEach(cell => {
+          if (!cell.players) return true
+          cell.players.forEach(player => {
+            if (player !== this && actions[actionName].isAvailable(this, {player})) {
+              availableActions.push({
+                name: `${actions[actionName].name} ${player.name}`,
+                actionPoints: actions[actionName].actionPoints,
+                isAvailable: actions[actionName].isAvailable,
+                use: () => { actions[actionName].use(this, {player}) } // Custom run
+              })
+            }
+          })
+        })
+        return true
+      }
+
+      if (actions[actionName].isAvailable(this)) {
+        availableActions.push({
+          name: actions[actionName].name,
+          actionPoints: actions[actionName].actionPoints,
+          isAvailable: actions[actionName].isAvailable,
+          use: actions[actionName].use
+        })
+      }
     })
+
     return availableActions
+  }
+
+  inRangeFor(player) {
+    if (!this.inventory.activeWeapon) return false
+
+    var distance = Math.abs(player.cell.x - this.cell.x) + Math.abs(player.cell.y - this.cell.y)
+    if (['Melee', 'Shotgun'].indexOf(this.inventory.activeWeapon.type) !== -1) {
+      return distance <= 0
+    }
+    if (['Sniper'].indexOf(this.inventory.activeWeapon.type) !== -1) {
+      return distance <= 1
+    }
+    return false
+  }
+
+  attack(player) {
+    if (!this.inRangeFor(player)) return false
+    player.damage(this.inventory.activeWeapon.damage)
+  }
+
+  damage(damage) {
+    this.shield -= damage
+    if (this.shield < 0) {
+      this.health += this.shield
+      this.shield = 0
+      if (this.health <= 0) this.die()
+    }
+  }
+
+  die() {
+    if (this.inventory.slots.length) {
+      var todrop = this.inventory.slots.sort((a, b) => {
+        return a.tier > b.tier ? 1 : -1
+      })[0]
+      this.cell.loot.push(todrop)
+    }
+    this.cell.removePlayer(this)
+    this.game.players.splice(this.game.players.findIndex(player => player === this), 1)
   }
 }
 

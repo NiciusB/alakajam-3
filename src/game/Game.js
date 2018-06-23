@@ -25,7 +25,7 @@ class Game {
 
     this.turn++
     this.players.forEach(player => {
-      player.actionPoints = 3
+      player.actionPoints = 5
     })
   }
 }

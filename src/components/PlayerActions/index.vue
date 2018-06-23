@@ -3,7 +3,9 @@
     <Inventory :game="game" />
     <p>Action Points left: {{game.controlledPlayer.actionPoints}}</p>
     <p>Actions:</p>
-    <p class="action" @click="action.use(game.controlledPlayer)" v-for="action in availableActions" :key="action.name">{{action.name}} ({{action.actionPoints}} ap)</p>
+    <div class="action-list">
+      <p class="action" @click="action.use(game.controlledPlayer)" v-for="action in availableActions" :key="action.name">{{action.name}} ({{action.actionPoints}} ap)</p>
+    </div>
   </div>
 </template>
 
@@ -30,8 +32,12 @@ export default {
     width: 560px;
     height: 360px;
     text-align: center;
-    .action {
-      cursor: pointer;
+    .action-list {
+      overflow: auto;
+      max-height: 178px;
+      .action {
+        cursor: pointer;
+      }
     }
   }
 </style>
